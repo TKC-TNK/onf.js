@@ -81,16 +81,19 @@ if(typeof jQuery != 'undefined'){
 	}
 })();
 
-(function($){
+(function(){
 	"use strict";
-
-	window.doc = document;
 
 	var MODE_CSS3 = 1;
 	var MODE_JS   = 2;
 	var debugMode = MODE_CSS3;
 
-	window.Shared = (function(){
+	window.Shared = new function(){
+
+		/*****************************************************************************************************************
+		 * ユーザーエージェント判別
+		 *****************************************************************************************************************/
+
 		var _ua = window.navigator.userAgent.toLowerCase(),
 		    _IE, _IEver,
 		    _Chrome, _ChromeVer,
@@ -100,7 +103,7 @@ if(typeof jQuery != 'undefined'){
 		    _Mac, _iPhone, _iPad, _iPod, _iOSver,
 		    _Android, _AndroidMobile, _AndroidTablet, _AndroidVer,
 		    _WindowsPhone, _nexus7,
-			_3ds, _dsi, _wii, _wiiu, _ps3, _psp, _xbox,
+			_3ds, _dsi, _wii, _wiiu, _ps3, _ps4, _psp, _psv, _xbox,
 			_bot;
 
 		// ブラウザ
@@ -165,18 +168,26 @@ if(typeof jQuery != 'undefined'){
 			_WindowsPhone = true;
 		}
 
-		// ゲーム機
+		
 		if(_ua.indexOf('mac os') != -1){
 			_Mac = true;
 		}
 		if(_ua.indexOf('nexus 7') != -1){
 			_nexus7 = true;
 		}
+
+		// ゲーム機
 		if(_ua.indexOf('playstation 3') != -1){
 			_ps3 = true;
 		}
+		if(_ua.indexOf('playstation 4') != -1){
+			_ps4 = true;
+		}
 		if(_ua.indexOf('playstation portable') != -1){
 			_psp = true;
+		}
+		if(_ua.indexOf('playstation vita') != -1){
+			_psv = true;
 		}
 		if(_ua.indexOf('nintendo') != -1){
 			if(_ua.indexOf('dsi;') != -1){
@@ -205,6 +216,7 @@ if(typeof jQuery != 'undefined'){
 		}
 
 		var ua = {
+			// IE系
 			 isIE     : !!_IE
 			,isIE6    : (_IEver == 6.0)
 			,isIE7    : (_IEver == 7.0)
@@ -225,6 +237,7 @@ if(typeof jQuery != 'undefined'){
 			,isIElt10 : !!(_IE && _IEver < 10)
 			,isIElt11 : !!(_IE && _IEver < 11)
 
+			// スマートフォン系
 			,isiPhone : !!_iPhone
 			,isiPad   : !!_iPad
 			,isiPod   : !!_iPod
@@ -238,20 +251,24 @@ if(typeof jQuery != 'undefined'){
 			,isTablet       : (!!_iPad || !!_AndroidTablet)
 			,isNexus7       : (!!_nexus7)
 
+			// ゲーム系
 			,isPS3    : (!!_ps3)
+			,isPS4    : (!!_ps4)
 			,isPSP    : (!!_psp)
+			,isPSV    : (!!_psv)
 			,is3DS    : (!!_3ds)
 			,isDSi    : (!!_dsi)
 			,isWii    : (!!_wii)
 			,isWiiU   : (!!_wiiu)
-			//isXbox   : (!!_xbox)
 
+			// ブラウザ種別
 			,isSafari       : !!_Safari
 			,isChrome       : !!_Chrome
 			,isOpera        : !!_Opera
 			,isFireFox      : !!_FireFox
 			,isMac          : !!_Mac
 
+			// ブラウザバージョン
 			,verIE      : _IEver
 			,verFireFox : _FireFoxVer
 			,verChrome  : _ChromeVer
@@ -260,11 +277,15 @@ if(typeof jQuery != 'undefined'){
 			,verAndroid : _AndroidVer
 			,veriOS     : _iOSver
 
+			// その他
 			,isBot : !!_bot
 		};
 
 
-		// CSS
+		/*****************************************************************************************************************
+		 * CSS機能判別
+		 *****************************************************************************************************************/
+
 		var style  = document.createElement('div').style;
 		var vendor = '';
 		var prefix = '';
@@ -282,6 +303,34 @@ if(typeof jQuery != 'undefined'){
 		var hasMediaQuery     = false;
 		var hasPositionFixed  = false;
 
+		var cubicBezierParams = {
+			linear : null,
+			swing : [0.250, 0.100, 0.250, 1.000],
+			easeInQuad : [0.55, 0.085, 0.68, 0.53],
+			easeOutQuad : [0.25, 0.460, 0.45, 0.94],
+			easeInOutQuad : [0.455, 0.03, 0.515, 0.955],
+			easeInCubic : [0.550, 0.055, 0.675, 0.190],
+			easeOutCubic : [0.215, 0.610, 0.355, 1.000],
+			easeInOutCubic : [0.645, 0.045, 0.355, 1.000],
+			easeInQuart : [0.895, 0.030, 0.685, 0.220],
+			easeOutQuart : [0.165, 0.840, 0.440, 1.000],
+			easeInOutQuart : [0.770, 0.000, 0.175, 1.000],
+			easeInQuint : [0.755, 0.050, 0.855, 0.060],
+			easeOutQuint : [0.230, 1.000, 0.320, 1.000],
+			easeInOutQuint : [0.860, 0.000, 0.070, 1.000],
+			easeInSine : [0.470, 0.000, 0.745, 0.715],
+			easeOutSine : [0.390, 0.575, 0.565, 1.000],
+			easeInOutSine : [0.445, 0.050, 0.550, 0.950],
+			easeInExpo : [0.950, 0.050, 0.795, 0.035],
+			easeOutExpo : [0.190, 1.000, 0.220, 1.000],
+			easeInOutExpo : [1.000, 0.000, 0.000, 1.000],
+			easeInCirc : [0.600, 0.040, 0.980, 0.335],
+			easeOutCirc : [0.075, 0.820, 0.165, 1.000],
+			easeInOutCirc : [0.785, 0.135, 0.150, 0.860],
+			easeInBack : [0.600, -0.280, 0.735, 0.045],
+			easeOutBack : [0.175, 0.885, 0.320, 1.275],
+			easeInOutBack : [0.680, -0.550, 0.265, 1.550]
+		};
 
 		// RGBA
 		try{
@@ -397,6 +446,12 @@ if(typeof jQuery != 'undefined'){
 			}
 		})();
 
+		// position:fixed
+		hasPositionFixed = (function(){
+			// 誰か書いて
+			return true;
+		})();
+
 
 		// transform
 		var transform = {
@@ -443,28 +498,75 @@ if(typeof jQuery != 'undefined'){
 		}
 
 		var css = {
+			// ブラウザベンダーの文字列
 			 vendor : vendor
+
+			// CSSプレフィックスの文字列
 			,prefix : prefix
 
+			// rgba()による色指定が可能かどうか
 			,hasRGBA           : hasRGBA
+
+			// zoomが使用可能かどうか
 			,hasZoom           : hasZoom
+
+			// プレフィックスなしにopacityが使用可能かどうか
 			,hasOpacity        : hasOpacity
+
+			// プレフィックスなしにboxshadowが使用可能かどうか
 			,hasBoxShadow      : hasBoxShadow
+
+			// プレフィックスなしにborder-radiusが使用可能かどうか
 			,hasBorderRadius   : hasBorderRadius
+
+			// プレフィックスなしにbackground-sizeが使用可能かどうか
 			,hasBackgroundSize : hasBackgroundSize
+
+			// メディアクエリが使用可能かどうか
 			,hasMediaQuery     : hasMediaQuery
+
+			// メディアクエリが使用可能かどうか
 			,hasMediaQueries   : hasMediaQuery
+
+			// positon:fixedが使用可能かどうか
 			,hasPositionFixed  : hasPositionFixed
 
+			// 使用可能なtransform判定オブジェクト
 			,transform     : transform
+
+			// transitionが使用可能かどうか
 			,hasTransition : (debugMode == MODE_CSS3 ? hasTransition : false)
+
+			// css-animationが使用可能かどうか
 			,hasAnimation  : (debugMode == MODE_CSS3 ? hasAnimation  : false)
+
+			// transtion-endが使用可能かどうか
 			,transitionEnd : (debugMode == MODE_CSS3 ? transitionEnd : false)
+
+			// filterが使用可能かどうか
 			,hasFilter     : (debugMode == MODE_CSS3 ? hasFilter : false)
+
+			// イージング名をcubic-bezierに変換する関数
+			,easing : function(name){
+				if(name in cubicBezierParams){
+					var easing = cubicBezierParams[name];
+
+					if(easing != null){
+						return 'cubic-bezier('+easing[0]+', '+easing[1]+', '+easing[2]+', '+easing[3]+')';
+					}else{
+						return 'linear';
+					}
+				}else{
+					return 'linear';
+				}
+			}
 		};
 
 
-		// HTML
+		/*****************************************************************************************************************
+		 * HTML機能判別
+		 *****************************************************************************************************************/
+
 		var hasFlash = false;
 
 		try {
@@ -474,37 +576,141 @@ if(typeof jQuery != 'undefined'){
 		}
 
 		var html = {
+			// Flashが使用可能かどうか
 			 hasFlash  : hasFlash
+
+			// canvasが使用可能かどうか
 			,hasCanvas : !!document.createElement('canvas').getContext
+
+			// videoタグが使用可能かどうか
 			,hasVideo  : !!document.createElement('video').canPlayType
+
+			// audioタグが使用可能かどうか
 			,hasAudio  : !!document.createElement('audio').canPlayType
+
+			// SVGが使用可能かどうか
 			,hasSVG    : !!(document.createElementNS && document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect)
+
+			// WebGLが使用可能かどうか
 			,hasWebGL  : !!window.WebGLRenderingContext
+
+			// GPSが使用可能かどうか
 			,hasGeolocation : ('geolocation' in navigator)
+
+			// WebSocketが使用可能かどうか
 			,hasWebSocket   : ('WebSocket' in window || 'MozWebSocket' in window)
+
+			// WebWorkerが使用可能かどうか
 			,hasWebWorkers  : ('Worker' in window)
+
+			// HistoryAPIが使用可能かどうか
 			,hasHistoryAPI  : (typeof history.pushState === 'function' && 'onpopstate' in window)
+
+			// LocalStorageが使用可能かどうか
 			,hasLocalStorage : ('localStorage' in window)
+
+			// SessionStorageが使用可能かどうか
 			,hasSessionStorage : ('sessionStorage' in window)
 		};
 
-		// Event
+
+		
+		/*****************************************************************************************************************
+		 * イベント機能判別
+		 *****************************************************************************************************************/
+
 		var event = {
+			// orientationchangeイベント(画面の向きの変更)を持つ
 			 hasOrientationChange : ('onorientationchange' in window)
+
+			// hashchangeイベント(URLハッシュの変化)を持つ
 			,hasHashChange        : ('onhashchange' in window)
+
+			// devicemotionイベント(加速度センサ)を持つ
 			,hasDeviceMotion      : ('ondevicemotion' in window)
+
+			// propertychangeイベント(HTMLタグの属性変更)を持つ
 			,hasPropertyChange    : ('onpropertychange' in document.documentElement)
 		};
 
-		// Device
+
+
+		/*****************************************************************************************************************
+		 * 端末機能判別
+		 *****************************************************************************************************************/
+
 		var device = {
+			// タッチイベントが発生するかどうか
 			 hasTouch       : ('ontouchstart' in window)
+
+			// 加速度センサが使用可能かどうか
 			,hasMotion      : ('ondevicemotion' in window)
+
+			// 向きセンサが使用可能かどうか
 			,hasOrientation : (typeof window.orientation !== 'undefined')
+
+			// 端末のdevicepixelratio
 			,pixelRatio     : (window.devicePixelRatio ? window.devicePixelRatio : 1)
 		};
 
-		// Utility
+
+
+		/*****************************************************************************************************************
+		 * 便利関数
+		 *****************************************************************************************************************/
+
+		var resizeListeners = null;
+		var scrollListeners = null;
+		var winW = window.innerWidth  || document.documentElement.clientWidth;
+		var winH = window.innerHeight || document.documentElement.clientHeight;
+
+
+		function startResizeObserver(){
+			if(resizeListeners === null){
+				var handler = function(){
+					winW = window.innerWidth  || document.documentElement.clientWidth;
+					winH = window.innerHeight || document.documentElement.clientHeight;
+					for(var i=0; i<resizeListeners.length; i++){
+						resizeListeners[i].call(null, winW, winH);
+					}
+				};
+
+				resizeListeners = [];
+
+				if(window.addEventListener){
+					window.addEventListener('resize', handler, false);
+					window.addEventListener('orientationchange', function(){
+						setTimeout(handler, 1000);
+					}, false);
+				}else{
+					window.attachEvent('onresize', handler);
+				}
+			}
+		}
+
+		function startScrollObserver(){
+			if(scrollListeners === null){
+				var handler = function(){
+					var t = document.body.scrollTop || document.documentElement.scrollTop;
+					var l = document.body.scrollLeft || document.documentElement.scrollLeft;
+					var b = t + winH;
+					var r = l + winW;
+
+					for(var i=0; i<scrollListeners.length; i++){
+						scrollListeners[i].call(null, t, b, l, r);
+					}
+				};
+
+				scrollListeners = [];
+
+				if(window.addEventListener){
+					window.addEventListener('scroll', handler, false);
+				}else{
+					window.attachEvent('onscroll', handler);
+				}
+			}
+		}
+
 		var util = {
 			/*
 			 * @param n number
@@ -522,7 +728,12 @@ if(typeof jQuery != 'undefined'){
 			},
 
 			/*
+			 * requestAnimationFrameのラッパー。
+			 * @param fn コールバック関数
+			 * @param fps requestAnimationFrameが使えない場合のFPS。省略した場合は、30fps。
 			 * 
+			 * コールバック関数の引数は、[経過時間, 前回描画からの経過時間, 描画開始からの経過時間]
+			 * コールバック関数内でfalseを返すと、終了する。
 			 */
 			reqAF : function(fn, fps){
 				var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || window.setTimeout;
@@ -542,6 +753,9 @@ if(typeof jQuery != 'undefined'){
 				requestAnimationFrame(tick, dt);
 			},
 
+			/*
+			 * 配列オブジェクトか判定する関数。
+			 */
 			isArray : function(arg){
 				return (
 					   arg
@@ -551,14 +765,18 @@ if(typeof jQuery != 'undefined'){
 				);
 			},
 
-			hex2rgb : function(hex){
+			/*
+			 * 16進数カラーコードを、数値配列に変換する関数。
+			 * ex) #aabbff => [170, 187, 255]
+			 */
+			hex2rgb : function(arg){
 				var hexCode = new Array(3);
 
-				if(hex.match(/#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/)){
+				if(arg.match(/#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/)){
 					hexCode[0] = RegExp.$1;
 					hexCode[1] = RegExp.$2;
 					hexCode[2] = RegExp.$3;
-				}else if(hex.match(/#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/)){
+				}else if(arg.match(/#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/)){
 					hexCode[0] = RegExp.$1 + '' + RegExp.$1;
 					hexCode[1] = RegExp.$2 + '' + RegExp.$2;
 					hexCode[2] = RegExp.$3 + '' + RegExp.$3;
@@ -577,6 +795,10 @@ if(typeof jQuery != 'undefined'){
 				return null;
 			},
 
+			/*
+			 * 色配列を16進数カラーコードに変換する関数。#がついて返ってくるので注意。
+			 * ex) [170, 187, 255] => #aabbff
+			 */
 			rgb2hex : function(arg){
 				if(util.isArray(arg)){
 					return '#' + arg[0].toString(16) + arg[1].toString(16) + arg[2].toString(16);
@@ -585,10 +807,14 @@ if(typeof jQuery != 'undefined'){
 				}
 			},
 
-			parseURI : function(str){
+			/*
+			 * URL分解関数。
+			 * @param arg URL。省略した場合は、現在のURL。
+			 */
+			parseURI : function(arg){
 				var p = ['source', 'protocol', 'authority', 'userInfo', 'user', 'password', 'host', 'port', 'relative', 'path', 'directory', 'file', 'query', 'anchor'];
 				var r = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
-				var m = r.exec(str || location.href);
+				var m = r.exec(arg || location.href);
 				var u = {}
 				var i = p.length;
 
@@ -598,6 +824,10 @@ if(typeof jQuery != 'undefined'){
 				return u;
 			},
 
+			/*
+			 * クエリパラメータをオブジェクト化する関数。
+			 * @param arg URL。省略した場合は、現在のlocation.search。
+			 */
 			parseParam : function(arg){
 				var param = {};
 
@@ -606,6 +836,8 @@ if(typeof jQuery != 'undefined'){
 				}
 				if(arg && arg.indexOf('?') != -1){
 					arg = arg.split('?')[1];
+				}else{
+					arg = false;
 				}
 				if(arg){
 					var _f = arg.split('&');
@@ -622,6 +854,14 @@ if(typeof jQuery != 'undefined'){
 				return param;
 			},
 
+			/*
+			 * クラス継承を行う関数。
+			 * @param superClass 親クラス
+			 * @param subConstructor　子クラスのコンストラクタ
+			 * @param methods 小クラスに登録するメソッド(オブジェクト形式)。
+
+			 * @return 小クラスの定義。
+			 */
 			extend : function(superClass, subConstructor, methods){
 				if (typeof Object.create !== 'function') {
 					Object.create = function(o) {
@@ -639,76 +879,128 @@ if(typeof jQuery != 'undefined'){
 					}
 				}
 				return subConstructor;
-			}
-		};
+			},
 
-		// cookie
-		var cookie = function(){
-			var name = arguments[0];
+			/*
+			 * サイズ変更時のリスナを登録する関数。
+			 * @param fn コールバック関数。関数には引数として、[画面幅, 画面高]が渡される。
+			 * @param init 登録直後に実行するかどうか。省略した場合は、true。
+			 */
+			addResizeListener : function(fn, init){
+				if(typeof fn === 'function'){
+					startResizeObserver();
 
-			if(!!name){
-				if(arguments.length > 1){
-					// write
-					var value   = (arguments[1] || '');
-					var options = (arguments[2] || {});
+					resizeListeners.push(fn);
 
-					var path    = options.path   ? '; path=' + (options.path) : '';
-        			var domain  = options.domain ? '; domain=' + (options.domain) : '';
-       				var secure  = options.secure ? '; secure' : '';
-					var expires = options.expires ? options.expires : '';
+					if(init === undefined || init){
+						fn(winW, winH);
+					}
+				}
+			},
 
-					if(expires != ''){
-						var date;
+			/*
+			 * スクロール時のリスナを登録する関数。
+			 * @param fn コールバック関数。関数には引数として、[スクロールトップ, スクロールボトム, スクロールレフト, スクロールライト]が渡される。
+			 * @param init 登録直後に実行するかどうか。省略した場合は、true。
+			 */
+			addScrollListener : function(fn, init){
+				if(typeof fn === 'function'){
+					startResizeObserver();
+					startScrollObserver();
 
-						if(typeof expires == 'number'){
-							date = new Date();
-							date.setTime(date.getTime() + expires*1000);
-						}else if(expires.toUTCString){
-							date = expires;
-						}else if(typeof expires == 'string'){
-							var msec = 0;
+					scrollListeners.push(fn);
 
-							if(expires.match(/^([0-9]+)second(s)?$/)){
-								msec = (RegExp.$1-0)*1000;
-							}else if(expires.match(/^([0-9]+)minute(s)?$/)){
-								msec = (RegExp.$1-0)*60*1000;
-							}else if(expires.match(/^([0-9]+)hour(s)?$/)){
-								msec = (RegExp.$1-0)*60*60*1000;
-							}else if(expires.match(/^([0-9]+)day(s)?$/)){
-								msec = (RegExp.$1-0)*24*60*60*1000;
-							}else if(expires.match(/^([0-9]+)week(s)?/)){
-								msec = (RegExp.$1-0)*7*24*60*60*1000;
-							}else if(expires.match(/^([0-9]+)month(s)?$/)){
-								msec = (RegExp.$1-0)*30*24*60*60*1000;
-							}else if(expires.match(/^([0-9]+)year(s)?$/)){
-								msec = (RegExp.$1-0)*365*24*60*60*1000;
-							}
-							if(msec > 0){
+					if(init === undefined || init){
+						var t = document.body.scrollTop || document.documentElement.scrollTop;
+						var l = document.body.scrollLeft || document.documentElement.scrollLeft;
+						var b = t + winW;
+						var r = l + winH;
+						fn(t, b, l, r);
+					}
+				}
+			},
+
+			/*
+			 * cookie読み込み/書き込み関数。
+			 * @param name 第1引数のみの場合は、読み込みを行う。第2引数が存在する場合は、書き込みを行う。
+			 * @param value 書き込む値。
+			 * @param options path、domain、expires、secureの設定が可能。
+			 * 
+			 * expiresは、保存秒数または数値+単位で設定する。
+			 * ex1) 3600 => 1時間
+			 * ex2) 1month => 30日
+			 */
+			cookie : function(){
+				var name = arguments[0];
+
+				if(!!name){
+					if(arguments.length > 1){
+						// write
+						var value   = (arguments[1] || '');
+						var options = (arguments[2] || {});
+
+						var path    = options.path   ? '; path=' + (options.path) : '';
+	        			var domain  = options.domain ? '; domain=' + (options.domain) : '';
+	       				var secure  = options.secure ? '; secure' : '';
+						var expires = options.expires ? options.expires : '';
+
+						if(expires != ''){
+							var date;
+
+							if(typeof expires == 'number'){
 								date = new Date();
-								date.setTime(date.getTime() + msec);
-							}
-						}
-						if(date) expires = '; expires=' + date.toUTCString();
-					}
-					document.cookie = name + '=' + encodeURIComponent(value) + path + domain + secure + expires;
-				}else{
-					// read
-					if(!!document.cookie){
-						var sp = document.cookie.split(';');
+								date.setTime(date.getTime() + expires*1000);
+							}else if(expires.toUTCString){
+								date = expires;
+							}else if(typeof expires == 'string'){
+								var msec = 0;
 
-						for(var i=0; i<sp.length; i++){
-							var pair = sp[i].split('=');
-							if(jQuery.trim(pair[0]) == name){
-								return decodeURIComponent(jQuery.trim(pair[1]));
+								if(expires.match(/^([0-9]+)second(s)?$/)){
+									msec = (RegExp.$1-0)*1000;
+								}else if(expires.match(/^([0-9]+)minute(s)?$/)){
+									msec = (RegExp.$1-0)*60*1000;
+								}else if(expires.match(/^([0-9]+)hour(s)?$/)){
+									msec = (RegExp.$1-0)*60*60*1000;
+								}else if(expires.match(/^([0-9]+)day(s)?$/)){
+									msec = (RegExp.$1-0)*24*60*60*1000;
+								}else if(expires.match(/^([0-9]+)week(s)?/)){
+									msec = (RegExp.$1-0)*7*24*60*60*1000;
+								}else if(expires.match(/^([0-9]+)month(s)?$/)){
+									msec = (RegExp.$1-0)*30*24*60*60*1000;
+								}else if(expires.match(/^([0-9]+)year(s)?$/)){
+									msec = (RegExp.$1-0)*365*24*60*60*1000;
+								}
+								if(msec > 0){
+									date = new Date();
+									date.setTime(date.getTime() + msec);
+								}
+							}
+							if(date) expires = '; expires=' + date.toUTCString();
+						}
+						document.cookie = name + '=' + encodeURIComponent(value) + path + domain + secure + expires;
+					}else{
+						// read
+						if(!!document.cookie){
+							var sp = document.cookie.split(';');
+
+							for(var i=0; i<sp.length; i++){
+								var pair = sp[i].split('=');
+								if(jQuery.trim(pair[0]) == name){
+									return decodeURIComponent(jQuery.trim(pair[1]));
+								}
 							}
 						}
+						return undefined;
 					}
-					return undefined;
 				}
 			}
 		};
 
-		// ready
+
+		/*****************************************************************************************************************
+		 * readyイベント
+		 *****************************************************************************************************************/
+
 		var readyFn = [];
 
 		function ready(fn){
@@ -717,7 +1009,7 @@ if(typeof jQuery != 'undefined'){
 			}else{
 				readyFn.push(fn);
 			}
-		}
+		};
 		function doReady(){
 			for(var i=0; i<readyFn.length; i++){
 				readyFn[i].call();
@@ -743,124 +1035,39 @@ if(typeof jQuery != 'undefined'){
 			}
 		}
 
+		
+
+		/*****************************************************************************************************************
+		 * public
+		 *****************************************************************************************************************/
+
+		// 変更不可にする
 		if(Object.freeze) ua = Object.freeze(ua);
 		if(Object.freeze) css = Object.freeze(css);
 		if(Object.freeze) html = Object.freeze(html);
 		if(Object.freeze) event = Object.freeze(event);
 		if(Object.freeze) device = Object.freeze(device);
+		
 
-		return {
-			ua:ua,
-			css:css,
-			html:html,
-			util:util,
-			event:event,
-			ready:ready,
-			device:device,
-			cookie:cookie
-		};
-	})();
-
-
-	// jQueryを使用しない場合
-	if(typeof $ == 'undefined') return;
-
-
-	var cubicBezierParams = {
-		linear : null,
-		swing : [0.250, 0.100, 0.250, 1.000],
-		easeInQuad : [0.55, 0.085, 0.68, 0.53],
-		easeOutQuad : [0.25, 0.460, 0.45, 0.94],
-		easeInOutQuad : [0.455, 0.03, 0.515, 0.955],
-		easeInCubic : [0.550, 0.055, 0.675, 0.190],
-		easeOutCubic : [0.215, 0.610, 0.355, 1.000],
-		easeInOutCubic : [0.645, 0.045, 0.355, 1.000],
-		easeInQuart : [0.895, 0.030, 0.685, 0.220],
-		easeOutQuart : [0.165, 0.840, 0.440, 1.000],
-		easeInOutQuart : [0.770, 0.000, 0.175, 1.000],
-		easeInQuint : [0.755, 0.050, 0.855, 0.060],
-		easeOutQuint : [0.230, 1.000, 0.320, 1.000],
-		easeInOutQuint : [0.860, 0.000, 0.070, 1.000],
-		easeInSine : [0.470, 0.000, 0.745, 0.715],
-		easeOutSine : [0.390, 0.575, 0.565, 1.000],
-		easeInOutSine : [0.445, 0.050, 0.550, 0.950],
-		easeInExpo : [0.950, 0.050, 0.795, 0.035],
-		easeOutExpo : [0.190, 1.000, 0.220, 1.000],
-		easeInOutExpo : [1.000, 0.000, 0.000, 1.000],
-		easeInCirc : [0.600, 0.040, 0.980, 0.335],
-		easeOutCirc : [0.075, 0.820, 0.165, 1.000],
-		easeInOutCirc : [0.785, 0.135, 0.150, 0.860],
-		easeInBack : [0.600, -0.280, 0.735, 0.045],
-		easeOutBack : [0.175, 0.885, 0.320, 1.275],
-		easeInOutBack : [0.680, -0.550, 0.265, 1.550]
+		this.ua     = ua;
+		this.css    = css;
+		this.html   = html;
+		this.event  = event;
+		this.device = device;
+		this.util   = util;
+		this.ready  = ready;
 	};
+})();
 
-	function cubicBezier(name){
-		if(name in cubicBezierParams){
-			var easing = cubicBezierParams[name];
 
-			if(easing != null){
-				return 'cubic-bezier('+easing[0]+', '+easing[1]+', '+easing[2]+', '+easing[3]+')';
-			}else{
-				return 'linear';
-			}
-		}else{
-			return 'linear';
-		}
-	}
+// jQuery拡張
+if(typeof $ != 'undefined'){
 
 	/*******************************************************************************************************************************
 	 * Utility
 	 *******************************************************************************************************************************/
 
 	var dummyElement = null;
-
-	var win = $(window);
-	var winWidth;
-	var winHeight;
-	var resizeObservers = null;
-	var scrollObservers = null;
-	var wheelObservers  = null;
-
-	function startResizeObserver(){
-		resizeObservers = [];
-		function handler(){
-			winWidth = win.width();
-			winHeight = win.height();
-			for(var i=0; i<resizeObservers.length; i++){
-				(resizeObservers[i])(winWidth, winHeight);
-			}
-		}
-		handler();
-		if(window.addEventListener){
-			window.addEventListener('resize', handler, false);
-			window.addEventListener('orientationchange', function(){
-				setTimeout(handler, 1000);
-			}, false);
-		}else{
-			window.attachEvent('onresize', handler);
-		}
-	}
-
-	function startScrollObserver(){
-		scrollObservers = [];
-		function handler(){
-			var t = document.body.scrollTop || document.documentElement.scrollTop;
-			var l = document.body.scrollLeft || document.documentElement.scrollLeft;
-			var b = t + winHeight;
-			var r = l + winWidth;
-
-			for(var i=0; i<scrollObservers.length; i++){
-				(scrollObservers[i])(t, b, l, r);
-			}
-		}
-		if(window.addEventListener){
-			window.addEventListener('scroll', handler, false);
-		}else{
-			window.attachEvent('onscroll', handler);
-		}
-	}
-
 
 	$.extend({
 		preload : function(src){
@@ -874,48 +1081,6 @@ if(typeof jQuery != 'undefined'){
 			img.setAttribute('width', 'auto');
 			img.setAttribute('height', 'auto');
 			dummyElement.appendChild(img);
-		},
-
-		addResizeObserver : function(fn){
-			if(typeof fn === 'function'){
-				if(resizeObservers === null) startResizeObserver();
-				resizeObservers.push(fn);
-				fn(winWidth, winHeight);
-			}
-		},
-
-		addScrollObserver : function(fn){
-			if(typeof fn === 'function'){
-				if(resizeObservers === null) startResizeObserver();
-				if(scrollObservers === null) startScrollObserver();
-				scrollObservers.push(fn);
-
-				var t = document.body.scrollTop || document.documentElement.scrollTop;
-				var l = document.body.scrollLeft || document.documentElement.scrollLeft;
-				var b = t + winHeight;
-				var r = l + winWidth;
-				fn(t, b, l, r);
-			}
-		},
-
-		removeResizeObserver : function(fn){
-			if(resizeObservers !== null){
-				if(fn){
-					for(var i=0; i<resizeObservers.length;) (fn == resizeObservers[i]) ?  resizeObservers.splice(i, 1) : i++;
-				}else{
-					resizeObservers = [];
-				}
-			}
-		},
-
-		removeScrollObserver : function(fn){
-			if(scrollObservers !== null){
-				if(fn){
-					for(var i=0; i<scrollObservers.length;) (fn == scrollObservers[i]) ? scrollObservers.splice(i, 1) : i++;
-				}else{
-					scrollObservers = [];
-				}
-			}
 		},
 
 		useVML : function(){
@@ -1091,6 +1256,9 @@ if(typeof jQuery != 'undefined'){
 			});
 		},
 
+		/*
+		 * HTMLエレメントのstyleプロパティを除去する。
+		 */
 		clearStyle : function(){
 			return this.each(function(){
 				this.setAttribute('style', ''); // 空にしてからでないと、chromeで属性名が残る
@@ -1098,6 +1266,11 @@ if(typeof jQuery != 'undefined'){
 			});
 		},
 
+		/*
+		 * imgタグを遅延ロードする。
+		 * @param fn 遅延ロード完了後に呼ばれるコールバック関数
+		 * @param attrName imgタグのsrc属性に代入する属性。省略した場合は、data-src。
+		 */
 		postload : function(fn, attrName){
 			var these = this;
 			var target = new Array();
@@ -1125,20 +1298,29 @@ if(typeof jQuery != 'undefined'){
 					var img = new Image();
 
 					img.onload = function(){
-						if(fn && ++count == target.length) fn(success);
+						if(++count == target.length){
+							if(fn && typeof fn == 'function') fn(success);
+						}
 					};
 					img.onerror = function(){
 						success = false;
-						if(fn && ++count == target.length) fn(success);
+
+						if(++count == target.length){
+							if(fn && typeof fn == 'function') fn(success);
+						}
 					};
 					img.src = src;
 				}
 			}else{
-				if(fn) fn(false);
+				if(fn && typeof fn == 'function') fn(false);
 			}
 			return this;
 		},
 
+		/*
+		 * 要素および要素内の画像の読み込み完了のコールバック
+		 * @param fn 関数
+		 */
 		loadEnd : function(fn){
 			var imgSrc = new Array();
 			var success = true;
@@ -1169,6 +1351,13 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		},
 
+		/*
+		 * transtionを設定する関数
+		 * @param prop 変化させるCSSプロパティ
+		 * @param duration 変化にかかる時間
+		 * @param easing イージング(jQuery.easingの名前)
+		 * @param delay 遅延時間
+		 */
 		transition : function(prop, duration, easing, delay){
 			if(Shared.css.hasTransition){
 				if(prop){
@@ -1178,8 +1367,8 @@ if(typeof jQuery != 'undefined'){
 					if(prop == 'filter') prop = Shared.css.prefix+prop;
 					if(prop == 'transform') prop = Shared.css.prefix+prop;
 
-					this.css('transition', prop+' '+duration+'ms '+cubicBezier(easing)+' '+delay+'ms');
-					this.css(Shared.css.prefix+'transition', prop+' '+duration+'ms '+cubicBezier(easing)+' '+delay+'ms');
+					this.css('transition', prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms');
+					this.css(Shared.css.prefix+'transition', prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms');
 				}else{
 					this.css('transition', 'none');
 					this.css(Shared.css.prefix+'transition', 'none');
@@ -1188,13 +1377,19 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		},
 
+		/*
+		 * transitionの終了イベントを登録する関数
+		 * @param fn コールバック関数
+		 * @param once 一度きりのコールバック実行か。省略した場合は、true。
+		 * @param property transition対象のCSSプロパティ属性。省略した場合は、プロパティに関わらず実行。
+		 */
 		transitionEnd : function(fn, once, property){
 			if(Shared.css.transitionEnd){
 				if(fn){
 					this.each(function(){
 						function listener(e){
 							if(e.target == this && (property === undefined || e.propertyName == property || e.propertyName == Shared.css.prefix + property)){
-								if(once) this.removeEventListener(Shared.css.transitionEnd, listener);
+								if(once === undefined || once) this.removeEventListener(Shared.css.transitionEnd, listener);
 								fn.call(this, e);
 							}
 						}
@@ -1220,7 +1415,7 @@ if(typeof jQuery != 'undefined'){
 				this.each(function(){
 					var t = $.data(this, 'transition') || {};
 					var s = '';
-					var n = prop+' '+duration+'ms '+cubicBezier(easing)+' '+delay+'ms';
+					var n = prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms';
 					var a = [], i = 0;
 
 					if(prop == 'all'){
@@ -1292,6 +1487,9 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		},
 
+		/*
+		 * transformのエイリアス。
+		 */
 		transform : function(){
 			if(arguments.length > 0){
 				this.css('transform', arguments[0]).css(Shared.css.prefix+'transform', arguments[0]);
@@ -1301,6 +1499,12 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		},
 
+		/*
+		 * translate3dのエイリアス。
+		 * @param x x軸方向(右)の変量。省略した場合は、transformプロパティを除去
+		 * @param y y軸方向(下)の変量。省略した場合は0。
+		 * @param z z軸方向(前)の変量。省略した場合は0。
+		 */
 		translate3d : function(x, y, z){
 			if(arguments.length > 0){
 				if(x === undefined) x = 0;
@@ -1322,6 +1526,11 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		},
 
+		/*
+		 * transform-originのエイリアス。
+		 * @param x x軸方向の中心。数値で指定した場合は自動的にpxを付ける。%による文字列指定も可能。
+		 * @param y y軸方向の中心。数値で指定した場合は自動的にpxを付ける。%による文字列指定も可能。
+		 */
 		transformOrigin : function(x, y){
 			if(typeof x === 'number') x += 'px';
 			if(typeof y === 'number') y += 'px';
@@ -1363,7 +1572,7 @@ if(typeof jQuery != 'undefined'){
 				if(!iteration){
 					iteration = 'infinite';
 				}
-				return this.css(Shared.css.prefix+'animation', name+' '+duration+'ms '+delay+'ms '+cubicBezier(easing)+' '+iteration);
+				return this.css(Shared.css.prefix+'animation', name+' '+duration+'ms '+delay+'ms '+Shared.css.easing(easing)+' '+iteration);
 			}
 		},
 
@@ -1389,5 +1598,4 @@ if(typeof jQuery != 'undefined'){
 			return this;
 		}
 	});
-
-})(window.jQuery);
+}
