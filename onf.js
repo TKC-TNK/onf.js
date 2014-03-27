@@ -661,12 +661,16 @@ if(typeof jQuery != 'undefined'){
 
 		var resizeListeners = null;
 		var scrollListeners = null;
-		var winW = window.innerWidth  || document.documentElement.clientWidth;
-		var winH = window.innerHeight || document.documentElement.clientHeight;
+		var winW;
+		var winH;
+		var seeds = [123456789, 362436069, 521288629, 88675123];
 
 
 		function startResizeObserver(){
 			if(resizeListeners === null){
+				winW = window.innerWidth  || document.documentElement.clientWidth;
+				winH = window.innerHeight || document.documentElement.clientHeight;
+
 				var handler = function(){
 					winW = window.innerWidth  || document.documentElement.clientWidth;
 					winH = window.innerHeight || document.documentElement.clientHeight;
@@ -921,6 +925,30 @@ if(typeof jQuery != 'undefined'){
 			},
 
 			/*
+			 * リサイズ時のリスナを削除する関数。
+			 * @param fn 削除するコールバック関数。
+			 */
+			removeResizeListener : function(fn){
+				if(resizeListeners !== null){
+					for(var i=0; i<resizeListeners.length;){
+						fn == resizeListeners[i] ? resizeListeners.splice(i, 1) : i++;
+					}
+				}
+			},
+
+			/*
+			 * スクロール時のリスナを削除する関数。
+			 * @param fn 削除するコールバック関数。
+			 */
+			removeScrollListener : function(fn){
+				if(scrollListeners !== null){
+					for(var i=0; i<scrollListeners.length;){
+						fn == scrollListeners[i] ? scrollListeners.splice(i, 1) : i++;
+					}
+				}
+			},
+
+			/*
 			 * cookie読み込み/書き込み関数。
 			 * @param name 第1引数のみの場合は、読み込みを行う。第2引数が存在する場合は、書き込みを行う。
 			 * @param value 書き込む値。
@@ -993,6 +1021,30 @@ if(typeof jQuery != 'undefined'){
 						return undefined;
 					}
 				}
+			},
+
+			srand : function(seed){
+				seeds[2] ^= seed;
+				seeds[2] ^= seeds[2] >> 21;
+				seeds[2] ^= seeds[2] << 35;
+				seeds[2] ^= seeds[2] >> 4;
+				seeds[2] *= 268582165;
+
+			},
+
+			rand : function(min, max){
+				var t = (seeds[0]^(seeds[0]<<11));
+				seeds[0]=seeds[1];
+				seeds[1]=seeds[2];
+				seeds[2]=seeds[3];
+				
+				var r = ( seeds[3]=(seeds[3]^(seeds[3]>>19))^(t^(t>>8)) );
+
+				if(arguments.length >= 2){
+					return min + r%(max-min);
+				}else{
+					return r;
+				}
 			}
 		};
 
@@ -1047,8 +1099,8 @@ if(typeof jQuery != 'undefined'){
 		if(Object.freeze) html = Object.freeze(html);
 		if(Object.freeze) event = Object.freeze(event);
 		if(Object.freeze) device = Object.freeze(device);
+	
 		
-
 		this.ua     = ua;
 		this.css    = css;
 		this.html   = html;
@@ -1056,6 +1108,17 @@ if(typeof jQuery != 'undefined'){
 		this.device = device;
 		this.util   = util;
 		this.ready  = ready;
+		
+		/*
+		return {
+			ua : ua,
+			css : css,
+			html : html,
+			event : event,
+			device : device,
+			util : util,
+			ready : ready
+		};*/
 	};
 })();
 
@@ -1069,7 +1132,7 @@ if(typeof $ != 'undefined'){
 
 	var dummyElement = null;
 
-	$.extend({
+	jQuery.extend({
 		preload : function(src){
 			if(!dummyElement){
 				dummyElement = document.createElement('div');
@@ -1101,7 +1164,7 @@ if(typeof $ != 'undefined'){
 		}
 	});
 
-	$.fn.extend({
+	jQuery.fn.extend({
 
 		img2vml : function(){
 			if(Shared.ua.isIElt9){
@@ -1532,6 +1595,9 @@ if(typeof $ != 'undefined'){
 		 * @param y y軸方向の中心。数値で指定した場合は自動的にpxを付ける。%による文字列指定も可能。
 		 */
 		transformOrigin : function(x, y){
+			if(x == undefined) x = '50%';
+			if(y == undefined) y = '50%';
+
 			if(typeof x === 'number') x += 'px';
 			if(typeof y === 'number') y += 'px';
 
