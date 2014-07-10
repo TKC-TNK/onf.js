@@ -1,94 +1,18 @@
-/*
- * jQuery Easing v1.3 - http://gsgd.co.uk/sandbox/jquery/easing/
- *
- * Uses the built in easing capabilities added In jQuery 1.1
- * to offer multiple easing options
- *
- * TERMS OF USE - jQuery Easing
- *
- * Open source under the BSD License.
- *
- * Copyright ﾂｩ 2008 George McGinley Smith
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * Redistributions in binary form must reproduce the above copyright notice, this list
- * of conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- *
- * Neither the name of the author nor the names of contributors may be used to endorse
- * or promote products derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
- *  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
- * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- *
-*/
-if(typeof jQuery != 'undefined'){
-	jQuery.easing['jswing'] = jQuery.easing['swing'];
-
-	jQuery.extend(
-		jQuery.easing, {
-		def:'easeOutQuad',
-		swing:function(x,t,b,c,d){return jQuery.easing[jQuery.easing.def](x,t,b,c,d);},
-		easeInQuad:function(x,t,b,c,d){return c*(t/=d)*t+b;},
-		easeOutQuad:function(x,t,b,c,d){return -c *(t/=d)*(t-2)+b;},
-		easeInOutQuad:function(x,t,b,c,d){if((t/=d/2)<1) return c/2*t*t+b;return -c/2 *((--t)*(t-2) - 1)+b;},
-		easeInCubic:function(x,t,b,c,d){return c*(t/=d)*t*t+b;},
-		easeOutCubic:function(x,t,b,c,d){return c*((t=t/d-1)*t*t+1)+b;},
-		easeInOutCubic:function(x,t,b,c,d){if((t/=d/2)<1) return c/2*t*t*t+b;return c/2*((t-=2)*t*t+2)+b;},
-		easeInQuart:function(x,t,b,c,d){return c*(t/=d)*t*t*t+b;},
-		easeOutQuart:function(x,t,b,c,d){return -c *((t=t/d-1)*t*t*t - 1)+b;},
-		easeInOutQuart:function(x,t,b,c,d){if((t/=d/2)<1) return c/2*t*t*t*t+b;return -c/2 *((t-=2)*t*t*t - 2)+b;},
-		easeInQuint:function(x,t,b,c,d){return c*(t/=d)*t*t*t*t+b;},
-		easeOutQuint:function(x,t,b,c,d){return c*((t=t/d-1)*t*t*t*t+1)+b;},
-		easeInOutQuint:function(x,t,b,c,d){if((t/=d/2)<1) return c/2*t*t*t*t*t+b;return c/2*((t-=2)*t*t*t*t+2)+b;},
-		easeInSine:function(x,t,b,c,d){return -c * Math.cos(t/d *(Math.PI/2))+c+b;},
-		easeOutSine:function(x,t,b,c,d){return c * Math.sin(t/d *(Math.PI/2))+b;},
-		easeInOutSine:function(x,t,b,c,d){return -c/2 *(Math.cos(Math.PI*t/d) - 1)+b;},
-		easeInExpo:function(x,t,b,c,d){return(t==0)?b:c * Math.pow(2,10 *(t/d - 1))+b;},
-		easeOutExpo:function(x,t,b,c,d){return(t==d)?b+c:c *(-Math.pow(2,-10 * t/d)+1)+b;},
-		easeInOutExpo:function(x,t,b,c,d){if(t==0) return b;if(t==d) return b+c;if((t/=d/2)<1) return c/2 * Math.pow(2,10 *(t - 1))+b;return c/2 *(-Math.pow(2,-10 *--t)+2)+b;},
-		easeInCirc:function(x,t,b,c,d){return -c *(Math.sqrt(1 -(t/=d)*t) - 1)+b;},
-		easeOutCirc:function(x,t,b,c,d){return c * Math.sqrt(1 -(t=t/d-1)*t)+b;},
-		easeInOutCirc:function(x,t,b,c,d){if((t/=d/2)<1) return -c/2 *(Math.sqrt(1 - t*t) - 1)+b;return c/2 *(Math.sqrt(1 -(t-=2)*t)+1)+b;},
-		easeInElastic:function(x,t,b,c,d){var s=1.70158;var p=0;var a=c;if(t==0) return b;if((t/=d)==1) return b+c;if(!p) p=d*.3;if(a<Math.abs(c)){a=c;var s=p/4;}else var s=p/(2*Math.PI) * Math.asin(c/a);return -(a*Math.pow(2,10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p ))+b;},
-		easeOutElastic:function(x,t,b,c,d){var s=1.70158;var p=0;var a=c;if(t==0) return b;if((t/=d)==1) return b+c;if(!p) p=d*.3;if(a<Math.abs(c)){a=c;var s=p/4;}else var s=p/(2*Math.PI) * Math.asin(c/a);return a*Math.pow(2,-10*t) * Math.sin((t*d-s)*(2*Math.PI)/p )+c+b;},
-		easeInOutElastic:function(x,t,b,c,d){var s=1.70158;var p=0;var a=c;if(t==0) return b;if((t/=d/2)==2) return b+c;if(!p) p=d*(.3*1.5);if(a<Math.abs(c)){a=c;var s=p/4;}else var s=p/(2*Math.PI) * Math.asin(c/a);if(t<1) return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p ))+b;return a*Math.pow(2,-10*(t-=1)) * Math.sin((t*d-s)*(2*Math.PI)/p )*.5+c+b;},
-		easeInBack:function(x,t,b,c,d,s){if(s==undefined) s=1.70158;return c*(t/=d)*t*((s+1)*t - s)+b;},
-		easeOutBack:function(x,t,b,c,d,s){if(s==undefined) s=1.70158;return c*((t=t/d-1)*t*((s+1)*t+s)+1)+b;},
-		easeInOutBack:function(x,t,b,c,d,s){if(s==undefined) s=1.70158;if((t/=d/2)<1) return c/2*(t*t*(((s*=(1.525))+1)*t - s))+b;return c/2*((t-=2)*t*(((s*=(1.525))+1)*t+s)+2)+b;},
-		easeInBounce:function(x,t,b,c,d){return c - jQuery.easing.easeOutBounce(x,d-t,0,c,d)+b;},
-		easeOutBounce:function(x,t,b,c,d){if((t/=d)<(1/2.75)){return c*(7.5625*t*t)+b;}else if(t<(2/2.75)){return c*(7.5625*(t-=(1.5/2.75))*t+.75)+b;}else if(t<(2.5/2.75)){return c*(7.5625*(t-=(2.25/2.75))*t+.9375)+b;}else{return c*(7.5625*(t-=(2.625/2.75))*t+.984375)+b;}},
-		easeInOutBounce:function(x,t,b,c,d){if(t<d/2) return jQuery.easing.easeInBounce(x,t*2,0,c,d) * .5+b;return jQuery.easing.easeOutBounce(x,t*2-d,0,c,d) * .5+c*.5+b;}
-	});
-}
 
 // remvoe no-js
 (function(){
 	if(document.documentElement.className.indexOf('no-js') !== -1){
 		document.documentElement.className = document.documentElement.className.replace('no-js', '');
+		if(document.documentElement.className == '') document.documentElement.removeAttribute('class');
 	}
 })();
 
 (function(){
 	"use strict";
 
-	var MODE_CSS3 = 1;
-	var MODE_JS   = 2;
-	var debugMode = MODE_CSS3;
+	var USE_CSS3 = true;
 
-	window.Shared = new function(){
+	window.Shared = (function(){
 
 		/*****************************************************************************************************************
 		 * ユーザーエージェント判別
@@ -303,34 +227,6 @@ if(typeof jQuery != 'undefined'){
 		var hasMediaQuery     = false;
 		var hasPositionFixed  = false;
 
-		var cubicBezierParams = {
-			linear : null,
-			swing : [0.250, 0.100, 0.250, 1.000],
-			easeInQuad : [0.55, 0.085, 0.68, 0.53],
-			easeOutQuad : [0.25, 0.460, 0.45, 0.94],
-			easeInOutQuad : [0.455, 0.03, 0.515, 0.955],
-			easeInCubic : [0.550, 0.055, 0.675, 0.190],
-			easeOutCubic : [0.215, 0.610, 0.355, 1.000],
-			easeInOutCubic : [0.645, 0.045, 0.355, 1.000],
-			easeInQuart : [0.895, 0.030, 0.685, 0.220],
-			easeOutQuart : [0.165, 0.840, 0.440, 1.000],
-			easeInOutQuart : [0.770, 0.000, 0.175, 1.000],
-			easeInQuint : [0.755, 0.050, 0.855, 0.060],
-			easeOutQuint : [0.230, 1.000, 0.320, 1.000],
-			easeInOutQuint : [0.860, 0.000, 0.070, 1.000],
-			easeInSine : [0.470, 0.000, 0.745, 0.715],
-			easeOutSine : [0.390, 0.575, 0.565, 1.000],
-			easeInOutSine : [0.445, 0.050, 0.550, 0.950],
-			easeInExpo : [0.950, 0.050, 0.795, 0.035],
-			easeOutExpo : [0.190, 1.000, 0.220, 1.000],
-			easeInOutExpo : [1.000, 0.000, 0.000, 1.000],
-			easeInCirc : [0.600, 0.040, 0.980, 0.335],
-			easeOutCirc : [0.075, 0.820, 0.165, 1.000],
-			easeInOutCirc : [0.785, 0.135, 0.150, 0.860],
-			easeInBack : [0.600, -0.280, 0.735, 0.045],
-			easeOutBack : [0.175, 0.885, 0.320, 1.275],
-			easeInOutBack : [0.680, -0.550, 0.265, 1.550]
-		};
 
 		// RGBA
 		try{
@@ -478,7 +374,7 @@ if(typeof jQuery != 'undefined'){
 			'perspective' : '100px'
 		};
 
-		if(debugMode == MODE_CSS3 && ('transform' in style || prefix+'transform' in style)){
+		if(USE_CSS3 && ('transform' in style || prefix+'transform' in style)){
 			for(var property in transform){
 				var val = property + '(' + transform[property] + ')';
 
@@ -535,31 +431,16 @@ if(typeof jQuery != 'undefined'){
 			,transform     : transform
 
 			// transitionが使用可能かどうか
-			,hasTransition : (debugMode == MODE_CSS3 ? hasTransition : false)
+			,hasTransition : (USE_CSS3 ? hasTransition : false)
 
 			// css-animationが使用可能かどうか
-			,hasAnimation  : (debugMode == MODE_CSS3 ? hasAnimation  : false)
+			,hasAnimation  : (USE_CSS3 ? hasAnimation  : false)
 
 			// transtion-endが使用可能かどうか
-			,transitionEnd : (debugMode == MODE_CSS3 ? transitionEnd : false)
+			,transitionEnd : (USE_CSS3 ? transitionEnd : false)
 
 			// filterが使用可能かどうか
-			,hasFilter     : (debugMode == MODE_CSS3 ? hasFilter : false)
-
-			// イージング名をcubic-bezierに変換する関数
-			,easing : function(name){
-				if(name in cubicBezierParams){
-					var easing = cubicBezierParams[name];
-
-					if(easing != null){
-						return 'cubic-bezier('+easing[0]+', '+easing[1]+', '+easing[2]+', '+easing[3]+')';
-					}else{
-						return 'linear';
-					}
-				}else{
-					return 'linear';
-				}
-			}
+			,hasFilter     : (USE_CSS3 ? hasFilter : false)
 		};
 
 
@@ -611,8 +492,15 @@ if(typeof jQuery != 'undefined'){
 
 			// SessionStorageが使用可能かどうか
 			,hasSessionStorage : ('sessionStorage' in window)
-		};
 
+			,hasFormData : ('FormData' in window)
+
+			// ドラッグ&ドロップAPIが使用可能かどうか
+			,hasDragAndDrop : ('ondrop' in document.createElement('div'))
+
+			// WebAudioAPIが使用可能かどうか
+			,hasWebAudioAPI : ('AudioContext' in window || 'webkitAudioContext' in window)
+		};
 
 		
 		/*****************************************************************************************************************
@@ -654,6 +542,95 @@ if(typeof jQuery != 'undefined'){
 		};
 
 
+		/*****************************************************************************************************************
+		 * イージング
+		 *****************************************************************************************************************/
+
+		var __cubicBezierParams = {
+			linear : null,
+			swing : [0.250, 0.100, 0.250, 1.000],
+			iX2 : [0.55, 0.085, 0.68, 0.53],
+			oX2 : [0.25, 0.460, 0.45, 0.94],
+			ioX2 : [0.455, 0.03, 0.515, 0.955],
+			iX3 : [0.550, 0.055, 0.675, 0.190],
+			oX3 : [0.215, 0.610, 0.355, 1.000],
+			ioX3 : [0.645, 0.045, 0.355, 1.000],
+			iX4 : [0.895, 0.030, 0.685, 0.220],
+			oX4 : [0.165, 0.840, 0.440, 1.000],
+			ioX4 : [0.770, 0.000, 0.175, 1.000],
+			iX5 : [0.755, 0.050, 0.855, 0.060],
+			oX5 : [0.230, 1.000, 0.320, 1.000],
+			ioX5 : [0.860, 0.000, 0.070, 1.000],
+			iSin : [0.470, 0.000, 0.745, 0.715],
+			oSin : [0.390, 0.575, 0.565, 1.000],
+			ioSin : [0.445, 0.050, 0.550, 0.950],
+			iExp : [0.950, 0.050, 0.795, 0.035],
+			oExp : [0.190, 1.000, 0.220, 1.000],
+			ioExp : [1.000, 0.000, 0.000, 1.000],
+			iCirc : [0.600, 0.040, 0.980, 0.335],
+			oCirc : [0.075, 0.820, 0.165, 1.000],
+			ioCirc : [0.785, 0.135, 0.150, 0.860],
+			iBack : [0.600, -0.280, 0.735, 0.045],
+			oBack : [0.175, 0.885, 0.320, 1.275],
+			ioBack : [0.680, -0.550, 0.265, 1.550]
+		};
+
+		var easing = {
+
+			/*
+			 * バウンドするイージング
+			 * @param n バウンド数-1
+			 * @param s 強さ
+			 */
+			bounce : function(x, n, s){
+				var a = [1];
+				var p = 2/n/n;
+				for(var i=1; i<n; i++) a[a.length] = 1-p*i*(i+1)/2;
+				a[a.length] = -n*p/2;
+
+				for(var i=0; i<a.length; i++){
+					if(x > a[i]){
+						if(i == a.length-1){
+							return x*x/(n*p/2)/(n*p/2);
+						}else{
+							return s*(x-a[i])*(x-a[i-1])+1;
+						}
+					}
+				}
+			},
+
+			/*
+			 * 弾性イージング
+			 * @param c 回転数
+			 * @param a オフセット
+			 * @param s 強さ
+			 */
+			elastic : function(x, c, a, s){
+				if(x < a){
+					return Math.exp(10*(x/a-1));
+				}else{
+					return 1 + s*Math.exp((a-x)*5)*Math.sin(360*c*(x-a)/(1-a)*Math.PI/180);
+				}
+			},
+
+			/*
+			 * イージング名をcubic-bezierに変換する関数
+			 */
+			parse : function(name){
+				if(name in __cubicBezierParams){
+					var easing = __cubicBezierParams[name];
+
+					if(easing != null){
+						return 'cubic-bezier('+easing[0]+', '+easing[1]+', '+easing[2]+', '+easing[3]+')';
+					}else{
+						return 'linear';
+					}
+				}else{
+					return 'linear';
+				}
+			}
+		};
+
 
 		/*****************************************************************************************************************
 		 * 便利関数
@@ -668,6 +645,8 @@ if(typeof jQuery != 'undefined'){
 
 		function startResizeObserver(){
 			if(resizeListeners === null){
+				resizeListeners = [];
+
 				winW = window.innerWidth  || document.documentElement.clientWidth;
 				winH = window.innerHeight || document.documentElement.clientHeight;
 
@@ -675,11 +654,9 @@ if(typeof jQuery != 'undefined'){
 					winW = window.innerWidth  || document.documentElement.clientWidth;
 					winH = window.innerHeight || document.documentElement.clientHeight;
 					for(var i=0; i<resizeListeners.length; i++){
-						resizeListeners[i].call(null, winW, winH);
+						resizeListeners[i].callback.call(resizeListeners[i].thisObject, winW, winH);
 					}
 				};
-
-				resizeListeners = [];
 
 				if(window.addEventListener){
 					window.addEventListener('resize', handler, false);
@@ -694,6 +671,8 @@ if(typeof jQuery != 'undefined'){
 
 		function startScrollObserver(){
 			if(scrollListeners === null){
+				scrollListeners = [];
+
 				var handler = function(){
 					var t = document.body.scrollTop || document.documentElement.scrollTop;
 					var l = document.body.scrollLeft || document.documentElement.scrollLeft;
@@ -701,11 +680,9 @@ if(typeof jQuery != 'undefined'){
 					var r = l + winW;
 
 					for(var i=0; i<scrollListeners.length; i++){
-						scrollListeners[i].call(null, t, b, l, r);
+						scrollListeners[i].callback.call(scrollListeners[i].thisObject, t, b, l, r);
 					}
 				};
-
-				scrollListeners = [];
 
 				if(window.addEventListener){
 					window.addEventListener('scroll', handler, false);
@@ -715,8 +692,10 @@ if(typeof jQuery != 'undefined'){
 			}
 		}
 
+
 		var util = {
 			/*
+			 * ゼロ埋め関数
 			 * @param n number
 			 * @param d digit
 			 * ex) zeroPad(12, 4) => 0012
@@ -732,6 +711,16 @@ if(typeof jQuery != 'undefined'){
 			},
 
 			/*
+			 * キャメル記法をCSSの記法に変換する関数。
+			 */
+			reverseCamelCase : function(arg){
+				if(typeof arg == 'string'){
+					return arg.split(/(?=[A-Z])/).join('-').toLowerCase();
+				}
+				return arg;
+			},
+
+			/*
 			 * requestAnimationFrameのラッパー。
 			 * @param fn コールバック関数
 			 * @param fps requestAnimationFrameが使えない場合のFPS。省略した場合は、30fps。
@@ -741,20 +730,29 @@ if(typeof jQuery != 'undefined'){
 			 */
 			reqAF : function(fn, fps){
 				var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.mozRequestAnimationFrame || window.setTimeout;
+				var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
 
 				var t0 = +new Date();
 				var pt = t0;
 				var dt = (fps ? 1000/fps : 30);
+				var id = null;
 
 				function tick(){
 					var t1 = +new Date();
 
-					if(fn(t1, t1-pt, t1-t0) !== false){
-						requestAnimationFrame(tick, dt);
+					id = requestAnimationFrame(tick, dt);
+
+					if(fn(t1, t1-pt, t1-t0, id) === false){
+						cancelAnimationFrame(id);
 					}
 					pt = t1;
 				}
-				requestAnimationFrame(tick, dt);
+				id = requestAnimationFrame(tick, dt);
+			},
+
+			cancelAF : function(id){
+				var cancelAnimationFrame = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.msCancelAnimationFrame || window.mozCancelAnimationFrame || window.clearTimeout;
+				cancelAnimationFrame(id);
 			},
 
 			/*
@@ -877,6 +875,12 @@ if(typeof jQuery != 'undefined'){
 				subConstructor.prototype = Object.create(superClass.prototype);
 				subConstructor.prototype.constructor = subConstructor;
 
+				subConstructor.prototype.__super__ = superClass.prototype;
+				subConstructor.prototype.__super__.constructor = superClass;
+
+				// スーパーコンストラクタ
+				//superClass.apply(this, args);
+
 				if(typeof methods == 'object'){
 					for(name in methods){
 						subConstructor.prototype[name] = methods[name];
@@ -888,16 +892,19 @@ if(typeof jQuery != 'undefined'){
 			/*
 			 * サイズ変更時のリスナを登録する関数。
 			 * @param fn コールバック関数。関数には引数として、[画面幅, 画面高]が渡される。
+			 * @param thisObject コールバック関数内のthisオブジェクト
 			 * @param init 登録直後に実行するかどうか。省略した場合は、true。
 			 */
-			addResizeListener : function(fn, init){
+			addResizeListener : function(fn, thisObject, init){
 				if(typeof fn === 'function'){
 					startResizeObserver();
 
-					resizeListeners.push(fn);
+					if(thisObject === undefined) thisObject = window;
+
+					resizeListeners[resizeListeners.length] = {callback:fn, thisObject:thisObject};
 
 					if(init === undefined || init){
-						fn(winW, winH);
+						fn.call(thisObject, winW, winH);
 					}
 				}
 			},
@@ -905,21 +912,24 @@ if(typeof jQuery != 'undefined'){
 			/*
 			 * スクロール時のリスナを登録する関数。
 			 * @param fn コールバック関数。関数には引数として、[スクロールトップ, スクロールボトム, スクロールレフト, スクロールライト]が渡される。
+			 * @param thisObject コールバック関数内のthisオブジェクト
 			 * @param init 登録直後に実行するかどうか。省略した場合は、true。
 			 */
-			addScrollListener : function(fn, init){
+			addScrollListener : function(fn, thisObject, init){
 				if(typeof fn === 'function'){
 					startResizeObserver();
 					startScrollObserver();
 
-					scrollListeners.push(fn);
+					if(thisObject === undefined) thisObject = window;
+
+					scrollListeners[scrollListeners.length] = {callback:fn, thisObject:thisObject};
 
 					if(init === undefined || init){
 						var t = document.body.scrollTop || document.documentElement.scrollTop;
 						var l = document.body.scrollLeft || document.documentElement.scrollLeft;
-						var b = t + winW;
-						var r = l + winH;
-						fn(t, b, l, r);
+						var b = t + winH;
+						var r = l + winW;
+						fn.call(thisObject, t, b, l, r);
 					}
 				}
 			},
@@ -931,7 +941,7 @@ if(typeof jQuery != 'undefined'){
 			removeResizeListener : function(fn){
 				if(resizeListeners !== null){
 					for(var i=0; i<resizeListeners.length;){
-						fn == resizeListeners[i] ? resizeListeners.splice(i, 1) : i++;
+						fn == resizeListeners[i].callback ? resizeListeners.splice(i, 1) : i++;
 					}
 				}
 			},
@@ -943,7 +953,7 @@ if(typeof jQuery != 'undefined'){
 			removeScrollListener : function(fn){
 				if(scrollListeners !== null){
 					for(var i=0; i<scrollListeners.length;){
-						fn == scrollListeners[i] ? scrollListeners.splice(i, 1) : i++;
+						fn == scrollListeners[i].callback ? scrollListeners.splice(i, 1) : i++;
 					}
 				}
 			},
@@ -1023,15 +1033,29 @@ if(typeof jQuery != 'undefined'){
 				}
 			},
 
+			/*
+			 * 乱数シード設定関数。
+			 * @param seed 新しいシード値
+			 */
 			srand : function(seed){
-				seeds[2] ^= seed;
-				seeds[2] ^= seeds[2] >> 21;
-				seeds[2] ^= seeds[2] << 35;
-				seeds[2] ^= seeds[2] >> 4;
-				seeds[2] *= 268582165;
-
+				if(!isNaN(seed)){
+					seed = parseInt(seed);
+					seeds[2] ^= seed;
+					seeds[2] ^= seeds[2] >> 21;
+					seeds[2] ^= seeds[2] << 35;
+					seeds[2] ^= seeds[2] >> 4;
+					seeds[2] *= 268582165;
+					util.rand();
+					util.rand();
+				}
 			},
 
+			/*
+			 * 整数乱数生成関数。アルゴリズムにxorshiftを使用
+			 * @param min 最小値
+			 * @param max 最大値-1
+			 * 引数を省略した場合は、処理系に依存する正整数値を返す。
+			 */
 			rand : function(min, max){
 				var t = (seeds[0]^(seeds[0]<<11));
 				seeds[0]=seeds[1];
@@ -1044,6 +1068,61 @@ if(typeof jQuery != 'undefined'){
 					return min + r%(max-min);
 				}else{
 					return r;
+				}
+			},
+
+			/*
+			 * 配列シャッフル関数。
+			 * @param arr シャッフルする配列
+			 * @param overwrite 配列を上書きするかどうか
+			 */
+			shuffle : function(arr, overwrite){
+				if(util.isArray(arr)){
+					if(overwrite || overwrite === undefined){
+						for(var i=0; i<arr.length; i++){
+							var j = util.rand(0, arr.length);
+							var t = arr[i];
+							arr[i] = arr[j];
+							arr[j] = t;
+						}
+					}else{
+						var index = [];
+						
+						for(var i=0; i<arr.length; i++){
+							index[i] = i;
+						}
+						for(var i=0; i<index.length; i++){
+							var j = util.rand(0, index.length);
+							var t = index[i];
+							index[i] = index[j];
+							index[j] = t;
+						}
+						for(var i=0; i<index.length; i++){
+							index[i] = arr[index[i]];
+						}
+						return index;
+					}
+				}
+			},
+
+			sanitize : function(str, nl2br){
+				if(str && typeof str == 'string'){
+					str = str.replace(/</igm,"&lt;").replace(/>/igm,"&gt;");
+
+					if(nl2br){
+						str = str.replace(/[\n]/g, '<br />');
+					}
+				}
+				return str;
+			},
+
+			gaTrack : function(category, action, label, value){
+				if(typeof _gaq == 'object' && typeof _gaq.push == 'function'){
+					_gaq.push(['_trackEvent', category, action, label, value]);
+
+				}else if(typeof ga == 'function'){
+					ga('send', 'event', category, action, label, value);
+
 				}
 			}
 		};
@@ -1059,7 +1138,7 @@ if(typeof jQuery != 'undefined'){
 			if(document.readyState === 'complete'){
 				fn.call();
 			}else{
-				readyFn.push(fn);
+				readyFn[readyFn.length] = fn;
 			}
 		};
 		function doReady(){
@@ -1071,7 +1150,7 @@ if(typeof jQuery != 'undefined'){
 			try {
 				document.documentElement.doScroll('left');
 			} catch(e) {
-				setTimeout(check, 1);
+				setTimeout(check, 4);
 				return;
 			}
 			doReady();
@@ -1100,31 +1179,83 @@ if(typeof jQuery != 'undefined'){
 		if(Object.freeze) event = Object.freeze(event);
 		if(Object.freeze) device = Object.freeze(device);
 	
-		
-		this.ua     = ua;
-		this.css    = css;
-		this.html   = html;
-		this.event  = event;
-		this.device = device;
-		this.util   = util;
-		this.ready  = ready;
-		
-		/*
 		return {
 			ua : ua,
 			css : css,
 			html : html,
 			event : event,
 			device : device,
+			easing : easing,
 			util : util,
 			ready : ready
-		};*/
-	};
+		};
+	})();
 })();
 
 
 // jQuery拡張
 if(typeof $ != 'undefined'){
+
+	/*******************************************************************************************************************************
+	 * Easing
+	 *******************************************************************************************************************************/
+
+	(function(){
+
+		jQuery.extend(
+			jQuery.easing, {
+				 iX2  : function(x,t,b,c,d){ return x*x; }
+				,oX2  : function(x,t,b,c,d){ return -x*(x-2); }
+				,ioX2 : function(x,t,b,c,d){ return (x < 0.5 ? 2*x*x : 1-2*(--x)*x); }
+				,oiX2 : function(x,t,b,c,d){ return (x < 0.5 ? -2*x*(x-1) : 1+2*x*(x-1)); }
+
+				,iX3  : function(x,t,b,c,d){ return x*x*x; }
+				,oX3  : function(x,t,b,c,d){ return 1+(--x)*x*x; }
+				,ioX3 : function(x,t,b,c,d){ return (x < 0.5 ? 4*x*x*x: 1+4*(--x)*x*x); }
+
+				,iX4  : function(x,t,b,c,d){ return x*x*x*x; }
+				,oX4  : function(x,t,b,c,d){ return 1-(--x)*x*x*x; }
+				,ioX4 : function(x,t,b,c,d){ return (x < 0.5 ? 8*x*x*x*x : 1-8*(--x)*x*x*x); }
+
+				,iX5  : function(x,t,b,c,d){ return x*x*x*x*x; }
+				,oX5  : function(x,t,b,c,d){ return 1+(--x)*x*x*x*x; }
+				,ioX2 : function(x,t,b,c,d){ return (x < 0.5 ? 16*x*x*x*x*x : 1+16*(--x)*x*x*x*x); }
+
+				,iExp  : function(x,t,b,c,d){ return Math.exp(10*(x-1)); }
+				,oExp  : function(x,t,b,c,d){ return 1-Math.exp(-10*x); }
+				,ioExp : function(x,t,b,c,d){ return (x < 0.5 ? 0.5*Math.exp(10*(x*2-1)) : 1-0.5*Math.exp(-10*(x-0.5)*2)); }
+
+				,iSin  : function(x,t,b,c,d){ return 1-Math.cos(x*Math.PI/2); }
+				,oSin  : function(x,t,b,c,d){ return Math.sin(x*Math.PI/2); }
+				,ioSin : function(x,t,b,c,d){ return 0.5-0.5*Math.cos(x*Math.PI); }
+
+				,iBack  : function(x,t,b,c,d){ var s=1.8; return x*x*((s+1)*x - s); }
+				,oBack  : function(x,t,b,c,d){ var s=1.8; return 1 + (x-1)*(x-1)*((s+1)*(x-1) + s); }
+				,ioBack : function(x,t,b,c,d){}
+
+				,iCirc  : function(x,t,b,c,d){ return -c *(Math.sqrt(1 -(t/=d)*t) - 1)+b; }
+				,oCirc  : function(x,t,b,c,d){ return c * Math.sqrt(1 -(t=t/d-1)*t)+b; }
+				,ioCirc : function(x,t,b,c,d){ if((t/=d/2)<1) return -c/2 *(Math.sqrt(1 - t*t) - 1)+b;return c/2 *(Math.sqrt(1 -(t-=2)*t)+1)+b; }
+
+				,elastic  : function(x,t,b,c,d){ return Shared.easing.elastic(x, 3, 0.1, 0.4); }
+				,elastic2 : function(x,t,b,c,d){ return Shared.easing.elastic(x, 2, 0.1, 0.4); }
+				,elastic3 : function(x,t,b,c,d){ return Shared.easing.elastic(x, 3, 0.1, 0.4); }
+				,elastic4 : function(x,t,b,c,d){ return Shared.easing.elastic(x, 4, 0.1, 0.4); }
+				,elastic5 : function(x,t,b,c,d){ return Shared.easing.elastic(x, 5, 0.1, 0.4); }
+				,elastic6 : function(x,t,b,c,d){ return Shared.easing.elastic(x, 6, 0.1, 0.4); }
+
+				,bounce  : function(x,t,b,c,d){ return Shared.easing.bounce(x,4,5); }
+				,bounce2 : function(x,t,b,c,d){ return Shared.easing.bounce(x,2,2); }
+				,bounce3 : function(x,t,b,c,d){ return Shared.easing.bounce(x,3,4); }
+				,bounce4 : function(x,t,b,c,d){ return Shared.easing.bounce(x,4,5); }
+				,bounce5 : function(x,t,b,c,d){ return Shared.easing.bounce(x,5,7); }
+				,bounce6 : function(x,t,b,c,d){ return Shared.easing.bounce(x,6,9); }
+			}
+		);
+	})();
+	
+
+	
 
 	/*******************************************************************************************************************************
 	 * Utility
@@ -1275,29 +1406,90 @@ if(typeof $ != 'undefined'){
 			return this;
 		},
 
-		ov : function(){
+
+		/*
+		 * マウスオーバー関数
+		 * data-srcによる遅延ロードにも対応。遅延ロードにはjQuery.fn.postloadを使用すること。
+		 * @param options {off:'オフマウス時の接尾辞', ov:'オンマウス時の接尾辞', cu:'選択時の接尾辞。trueの場合は_cu'}
+		 *
+		 * jQuery.fn.triggerHandler(type)またはjQuery.fn.trigger(type)を実行することで、強制的に画像を変更することが可能。typeは以下の通り。
+		 * pause.ov   マウスオーバー判定を停止する。
+		 * resume.ov  マウスオーバー判定を再開する。
+		 * enter.ov   オン画像に変更する。triggerの第2引数を省略するかtrueにした場合、判定も停止する。
+		 * leave.ov   オフ画像に変更する。triggerの第2引数を省略するかtrueにした場合、判定も停止する。
+		 * current.ov 選択画像に変更する。triggerの第2引数を省略するかtrueにした場合、判定も停止する。
+		 * reset.ov   初期状態にする。
+		 */
+		ov : function(options){
+			var suffixOf = '';
+			var suffixOv = '_ov';
+			var suffixCu = false;
+
+			if(options){
+				if('off' in options && options.off && typeof options.off == 'string'){
+					suffixOf = options.off;
+				}
+				if('ov' in options && options.ov && typeof options.ov == 'string'){
+					suffixOv = options.ov;
+				}
+				if('cu' in options && options.cu){
+					if(typeof options.cu == 'string'){
+						suffixCu = options.cu;
+					}else{
+						suffixCu = '_cu';
+					}
+				}
+			}
+
+			var regexp = new RegExp('^(.+)'+suffixOf+'(\.(png|gif|jpg|jpeg|bmp))$');
+
+
 			return this.each(function(){
-				var self = $(this);
-				var area = self;
+				var self    = $(this);
+				var area    = self;
+				var enabled = true;
+				var srcOff  = null;
+				var srcOv   = null;
+				var srcCu   = null;
 
 				function enter(){
-					if(self.hasClass('ov')) self.attr('src', srcOv);
+					if(enabled) self.attr('src', srcOv);
 				}
 				function leave(){
-					if(self.hasClass('ov')) self.attr('src', srcOff);
+					if(enabled) self.attr('src', srcOff);
 				}
 
-				if(this.tagName == 'IMG' || (this.tagName == 'INPUT' && this.type == 'image')){
+				if(this.tagName == 'IMG' || (this.tagName == 'INPUT' && typeof this.type === 'string' && this.type.toLowerCase() == 'image')){
+
+					var post = false;
+
+					// OV画像（遅延ロードも対応）
 					if(self.attr('data-src')){
-						var srcOff = self.attr('data-src');
+						srcOff = self.attr('data-src'); post = true;
 					}else{
-						var srcOff = self.attr('src');
+						srcOff = self.attr('src');
 					}
-					var srcOv  = srcOff.replace(/^(.+)(\..+)$/, '$1_ov$2');
 
-					$.preload(srcOff);
-					$.preload(srcOv);
+					srcOv = srcOff.replace(regexp, '$1'+suffixOv+'$2');
 
+					if(!post){
+						jQuery.preload(srcOv);
+					}else{
+						self.attr('data-src-ov', srcOv);
+					}
+
+					// CU画像（遅延ロードも対応）
+					if(suffixCu){
+						srcCu = srcOff.replace(regexp, '$1'+suffixCu+'$2');
+
+						if(!post){
+							jQuery.preload(srcCu);
+						}else{
+							self.attr('data-src-cu', srcCu);
+						}
+					}
+
+					// カーソルがポインタにならないバグの対応
 					if(self.hasClass('_rewrited2vml')){
 						if(this.parentNode.tagName == 'A' && this.parentNode.currentStyle['cursor'] == 'auto'){
 							this.parentNode.style.cursor = 'pointer';
@@ -1306,6 +1498,8 @@ if(typeof $ != 'undefined'){
 					if(this.parentNode.tagName == 'A'){
 						area = self.parent('a');
 					}
+
+					// イベント登録
 					if(Shared.device.hasTouch){
 						area.bind('touchstart', enter).bind('touchend touchcancel', leave);
 					}else{
@@ -1315,8 +1509,92 @@ if(typeof $ != 'undefined'){
 							$(this.parentNode).bind('focus', enter).bind('blur', leave);
 						}
 					}
+
+					// 判定停止
+					self.bind('pause.ov', function(e){
+						enabled = false;
+					});
+					// 判定再開
+					self.bind('resume.ov', function(e){
+						enabled = true;
+					});
+					// 強制的にオン状態
+					self.bind('enter.ov', function(e, pause){
+						self.attr('src', srcOv);
+						if(pause || pause===undefined) enabled = false;
+					});
+					// 強制的にオフ状態
+					self.bind('leave.ov', function(e, pause){
+						self.attr('src', srcOff);
+						if(pause || pause===undefined) enabled = false;
+					});
+					// 強制的に選択状態
+					self.bind('current.ov', function(e, pause){
+						if(srcCu){
+							self.attr('src', srcCu);
+							if(pause || pause===undefined) enabled = false;
+						}
+					});
+					// 通常状態に
+					self.bind('reset.ov', function(){
+						enabled = true;
+						self.attr('src', srcOff);
+					});
 				}
 			});
+		},
+
+		/*
+		 * 画像ファイル名置換関数。
+		 * @param options {prefix:"接頭辞", suffix:"接尾辞", ext:"拡張子"}
+		 */
+		replaceSrc : function(options){
+			var pre = false;
+			var suf = false;
+			var ext = false;
+
+			if(typeof options == 'object'){
+				if('prefix' in options && typeof options.prefix == 'string'){
+					pre = options.prefix;
+				}
+				if('suffix' in options && typeof options.suffix == 'string'){
+					suf = options.suffix;
+				}
+				if('ext' in options && typeof options.ext == 'string'){
+					ext = options.ext.split('.')[0];
+				}
+
+				var regexp = new RegExp('(?:(.+)/)?([^\/\.]+)\.([a-zA-Z0-9]+)([\?#;].*)?$');
+
+				this.each(function(){
+					if(this.tagName == 'IMG' || (this.tagName == 'INPUT' && typeof this.type === 'string' && this.type.toLowerCase() == 'image')){
+						if(this.getAttribute('data-src')){
+							var src = this.getAttribute('data-src');
+						}else{
+							var src = this.getAttribute('src');
+						}
+
+						if(src.match(regexp)){
+							var _path = RegExp.$1;
+							var _name = RegExp.$2;
+							var _ext  = RegExp.$3;
+
+							if(pre) _name = pre + _name;
+							if(suf) _name = _name + suf;
+							if(ext) _ext  = ext;
+
+							var file = (_path ? _path+'/' : '') + _name + '.' + _ext;
+
+							if(this.getAttribute('data-src')){
+								this.setAttribute('data-src', file);
+							}else{
+								this.setAttribute('src', file);
+							}
+						}
+					}
+				});
+			}
+			return this;
 		},
 
 		/*
@@ -1331,18 +1609,31 @@ if(typeof $ != 'undefined'){
 
 		/*
 		 * imgタグを遅延ロードする。
-		 * @param fn 遅延ロード完了後に呼ばれるコールバック関数
-		 * @param attrName imgタグのsrc属性に代入する属性。省略した場合は、data-src。
+		 * @param fn コールバック関数
+		 * @param thisObject コールバック関数内のthisオブジェクト
+		 * @param promise $.Deferred
 		 */
-		postload : function(fn, attrName){
+		postload : function(fn, thisObject, promise){
 			var these = this;
 			var target = new Array();
 
-			if(!attrName) attrName = 'data-src';
+			if(promise) var deferred = new jQuery.Deferred();
+
+			if(!thisObject) thisObject = window;
+
 
 			this.each(function(){
-				if(this.getAttribute(attrName)){
-					target.push(this);
+				if(this.getAttribute('data-src')){
+					target[target.length] = this;
+				}
+				if(this.getAttribute('data-src-ov')){
+					(new Image()).src = this.getAttribute('data-src-ov');
+					this.removeAttribute('data-src-ov');
+
+				}
+				if(this.getAttribute('data-src-cu')){
+					(new Image()).src = this.getAttribute('data-src-cu');
+					this.removeAttribute('data-src-cu');
 				}
 			});
 			if(target.length > 0){
@@ -1350,8 +1641,9 @@ if(typeof $ != 'undefined'){
 				var count = 0;
 
 				for(var i=0; i<target.length; i++){
-					var src = target[i].getAttribute(attrName);
-					target[i].removeAttribute(attrName);
+					var src = target[i].getAttribute('data-src');
+
+					target[i].removeAttribute('data-src');
 
 					if(target[i].tagName === 'IMG'){
 						target[i].src = src;
@@ -1362,37 +1654,53 @@ if(typeof $ != 'undefined'){
 
 					img.onload = function(){
 						if(++count == target.length){
-							if(fn && typeof fn == 'function') fn(success);
+							if(promise){
+								if(success){
+									deferred.resolve();
+								}else{
+									deferred.reject();
+								}
+							}
+							if(fn && typeof fn == 'function') fn.call(thisObject, success);
 						}
 					};
 					img.onerror = function(){
 						success = false;
 
 						if(++count == target.length){
-							if(fn && typeof fn == 'function') fn(success);
+							if(promise) deferred.reject();
+							if(fn && typeof fn == 'function') fn.call(thisObject, success);
 						}
 					};
 					img.src = src;
 				}
 			}else{
-				if(fn && typeof fn == 'function') fn(false);
+				if(promise) deferred.resolve();
+				if(fn && typeof fn == 'function') fn.call(thisObject, undefined);
 			}
-			return this;
+			return promise ? deferred.promise() : this;
 		},
 
 		/*
 		 * 要素および要素内の画像の読み込み完了のコールバック
-		 * @param fn 関数
+		 * @param fn コールバック関数
+		 * @param thisObject コールバック関数内のthisオブジェクト
+		 * @param async $.Deferred
 		 */
-		loadEnd : function(fn){
+		loadEnd : function(fn, thisObject, promise){
 			var imgSrc = new Array();
 			var success = true;
+			var deferred = new jQuery.Deferred();
+
+			if(promise) var deferred = new jQuery.Deferred();
+
+			if(!thisObject) thisObject = window;
 
 			this.filter('img').each(function(){
-				imgSrc.push(this.src);
+				imgSrc[imgSrc.length] = this.src;
 			});
 			this.find('img').each(function(){
-				imgSrc.push(this.src);
+				imgSrc[imgSrc.length] = this.src;
 			});
 
 			if(imgSrc.length > 0){
@@ -1400,18 +1708,31 @@ if(typeof $ != 'undefined'){
 					var img = new Image();
 
 					img.onload = function(){
-						if(++count == imgSrc.length) fn(success);
+						if(++count == imgSrc.length){
+							if(promise){
+								if(success){
+									deferred.resolve();
+								}else{
+									deferred.reject();
+								}
+							}
+							if(fn && typeof fn == 'function') fn.call(thisObject, success);
+						}
 					};
 					img.onerror = function(){
 						success = false;
-						if(++count == imgSrc.length) fn(success);
+						if(++count == imgSrc.length){
+							if(promise) deferred.reject();
+							if(fn && typeof fn == 'function') fn.call(thisObject, success);
+						}
 					};
 					img.src = imgSrc[i];
 				}
 			}else{
-				fn(undefined);
+				if(promise) deferred.resolve();
+				if(fn && typeof fn == 'function') fn.call(thisObject, undefined);
 			}
-			return this;
+			return promise ? deferred.promise() : this;
 		},
 
 		/*
@@ -1430,8 +1751,8 @@ if(typeof $ != 'undefined'){
 					if(prop == 'filter') prop = Shared.css.prefix+prop;
 					if(prop == 'transform') prop = Shared.css.prefix+prop;
 
-					this.css('transition', prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms');
-					this.css(Shared.css.prefix+'transition', prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms');
+					this.css('transition', prop+' '+duration+'ms '+Shared.easing.parse(easing)+' '+delay+'ms');
+					this.css(Shared.css.prefix+'transition', prop+' '+duration+'ms '+Shared.easing.parse(easing)+' '+delay+'ms');
 				}else{
 					this.css('transition', 'none');
 					this.css(Shared.css.prefix+'transition', 'none');
@@ -1463,89 +1784,6 @@ if(typeof $ != 'undefined'){
 						this.removeEventListener(Shared.css.transitionEnd);
 					});
 				}
-			}
-			return this;
-		},
-
-		addTransition : function(prop, duration, easing, delay){
-			if(Shared.css.hasTransition){
-				if(!prop) prop = 'all';
-				if(!duration) duration = 0;
-				if(!easing) easing = 'linear';
-				if(!delay) delay = 0;
-				if(prop == 'transform') prop = Shared.css.prefix + 'transform';
-
-				this.each(function(){
-					var t = $.data(this, 'transition') || {};
-					var s = '';
-					var n = prop+' '+duration+'ms '+Shared.css.easing(easing)+' '+delay+'ms';
-					var a = [], i = 0;
-
-					if(prop == 'all'){
-						t = {'all':n};
-					}else{
-						t[prop] = n;
-					}
-					for(var k in t){
-						a[i++] = t[k];
-					}
-					this.style['transition'] = a.join(',');
-
-					if(Shared.css.prefix != ''){
-						this.style[Shared.css.prefix+'transition'] = a.join(',');
-					}
-					$.data(this, 'transition', t);
-				});
-			}
-			return this;
-		},
-
-		removeTransition : function(prop){
-			if(Shared.css.hasTransition){
-				if(!prop) prop = 'all';
-				if(prop == 'transform') prop = Shared.css.prefix + 'transform';
-
-				this.each(function(){
-					if(prop == 'all'){
-						this.style['transition'] = '';
-
-						if(Shared.css.prefix != ''){
-							this.style[Shared.css.prefix+'transition'] = '';
-						}
-						$.data(this, 'transition', {});
-
-					}else{
-						var t = $.data(this, 'transition') || {};
-						var a = [];
-
-						for(var k in t){
-							if(k == prop){
-								delete t[prop];
-							}else{
-								a.push(t[k]);
-							}
-						}
-						this.style['transition'] = a.join(',');
-
-						if(Shared.css.prefix != ''){
-							this.style[Shared.css.prefix+'transition'] = a.join(',');
-						}
-						$.data(this, 'transition', t);
-					}
-				});
-			}
-			return this;
-		},
-
-		setPerspective : function(number){
-			if(Shared.css.transform.perspective){
-				this.each(function(){
-					var transform = $.data(this, 'transform') || Shared.css.getTransformTemplate();
-
-					transform.perspective = number;
-
-					$.data(this, 'transform', transform);
-				});
 			}
 			return this;
 		},
@@ -1594,18 +1832,20 @@ if(typeof $ != 'undefined'){
 		 * @param x x軸方向の中心。数値で指定した場合は自動的にpxを付ける。%による文字列指定も可能。
 		 * @param y y軸方向の中心。数値で指定した場合は自動的にpxを付ける。%による文字列指定も可能。
 		 */
-		transformOrigin : function(x, y){
+		transformOrigin : function(x, y, z){
 			if(x == undefined) x = '50%';
 			if(y == undefined) y = '50%';
+			if(z == undefined) z = '50%';
 
 			if(typeof x === 'number') x += 'px';
 			if(typeof y === 'number') y += 'px';
+			if(typeof z === 'number') z += 'px';
 
 			if(Shared.css.transform.translate){
-				this.css('transform-origin', x+' '+y);
+				this.css('transform-origin', x+' '+y).css('transform-origin', x+' '+y+' '+z);
 
 				if(Shared.css.prefix !== ''){
-					this.css(Shared.css.prefix+'transform-origin', x+' '+y);
+					this.css(Shared.css.prefix+'transform-origin', x+' '+y).css(Shared.css.prefix+'transform-origin', x+' '+y+' '+z);
 				}
 			}
 			return this;
@@ -1638,7 +1878,7 @@ if(typeof $ != 'undefined'){
 				if(!iteration){
 					iteration = 'infinite';
 				}
-				return this.css(Shared.css.prefix+'animation', name+' '+duration+'ms '+delay+'ms '+Shared.css.easing(easing)+' '+iteration);
+				return this.css(Shared.css.prefix+'animation', name+' '+duration+'ms '+delay+'ms '+Shared.easing.parse(easing)+' '+iteration);
 			}
 		},
 
@@ -1660,6 +1900,65 @@ if(typeof $ != 'undefined'){
 					//that.eq(i).css({marginLeft:-mx/2, marginTop:-my/2});
 					this.style.filter = "progid:DXImageTransform.Microsoft.Matrix(M11="+cos+", M12="+(sin)+", M21="+(-sin)+", M22="+cos+", SizingMethod='auto expand')";
 				});
+			}
+			return this;
+		},
+
+		/*
+		 * transtionアニメーション関数。stopは効かないので注意。
+		 * @param property 変化させるCSSプロパティ
+		 * @param duration 変化にかかる時間
+		 * @param easing   イージング名
+		 * @param callback 終了後コールバック
+		 */
+		transit : function(property, duration, easing, callback){
+			if(Shared.css.hasTransition){
+				if(typeof property == 'object'){
+					duration = (duration ? duration + 'ms' : '0ms');
+					easing   = (easing   ? Shared.easing.parse(easing) : 'linear');
+
+					var transition = [];
+					var targetProp = {};
+
+					for(var key in property){
+						var cssKey = key;
+
+						if(key == 'transform'){
+							cssKey = Shared.css.prefix+key;
+							targetProp[Shared.css.prefix+key] = property[key];
+						}else if(key == 'filter'){
+							cssKey = Shared.css.prefix+key;
+							targetProp[Shared.css.prefix+key] = property[key];
+						}else{
+							cssKey = Shared.util.reverseCamelCase(key);
+
+							if(typeof property[key] == 'string' || cssKey==='opacity' || cssKey==='zoom' || cssKey==='z-index' || cssKey==='font-weight' || cssKey==='line-height'){
+								targetProp[key] = property[key];
+							}else{
+								targetProp[key] = property[key] + 'px';
+							}
+						}
+						transition[transition.length] = [cssKey, duration, easing].join(' ');
+					}
+					transition = transition.join(',');
+
+					this.queue(function(){
+						function listener(e){
+							if(e.target === this){
+								if(typeof callback === 'function') callback.call(this, e);
+								this.removeEventListener(Shared.css.transitionEnd, listener);
+								$(this).dequeue();
+							}
+						}
+						this.addEventListener(Shared.css.transitionEnd, listener, false);
+						
+						$(this).css('transition', transition).css(Shared.css.prefix+'transition', transition).css(targetProp);//.dequeue();
+					});
+				}else{
+					this.css('transition', 'none').css(Shared.css.prefix+'transition', 'none').dequeue();
+				}
+			}else{
+				this.animate(property, duration, easing, callback);
 			}
 			return this;
 		}
